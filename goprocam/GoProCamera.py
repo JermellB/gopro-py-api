@@ -297,9 +297,8 @@ class GoPro:
 
     def getStatus(self, param, value=""):
         """This returns a status message based on param (status/setting) and value (numeric)"""
-        data = self.getStatusRaw()
         # timeouts & HTTP/URLErrors are returned as empty strings
-        if data == "":
+        if (data := self.getStatusRaw()) == "":
             return data
 
         if self.whichCam() == constants.Camera.Interface.GPControl:
@@ -452,8 +451,7 @@ class GoPro:
     def power_on(self, _mac_address=""):
         """Sends power on command. Mac address might need to be defined"""
         print("Waking up...")
-        mac_address = _mac_address
-        if mac_address is None:
+        if (mac_address := _mac_address) is None:
             mac_address = "AA:BB:CC:DD:EE:FF"
         else:
             mac_address = str(mac_address)
@@ -1206,8 +1204,7 @@ class GoPro:
         """gets clip URL from status"""
         resp = json.loads(self.gpControlCommand(
             "transcode/status?id=" + status).replace("\\", "/"))
-        resp_parsed = resp["status"]["status"]
-        if resp_parsed == 2:
+        if (resp_parsed := resp["status"]["status"]) == 2:
             return "http://" + self.ip_addr + ":80/videos/" + resp["status"]["output"]
 
     def cancelClip(self, video_id):

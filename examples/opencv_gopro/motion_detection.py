@@ -66,8 +66,7 @@ while True:
     sock.sendto("_GPHD_:0:0:2:0.000000\n".encode(), ("10.5.5.9", 8554))
     gp_sync_time=time()
 
-  key = cv2.waitKey(1) & 0xFF
-  if key == ord("q"):
+  if (key := cv2.waitKey(1) & 0xFF) == ord("q"):
     release()
     break
 release()
