@@ -806,7 +806,7 @@ class GoPro:
 
     def getWebcamPreview(self):
         subprocess.Popen(
-            "vlc --network-caching=300 --sout-x264-preset=ultrafast --sout-x264-tune=zerolatency --sout-x264-vbv-bufsize 0 --sout-transcode-threads 4 --no-audio udp://" + self.ip_addr + ":8554", shell=True)
+            "vlc --network-caching=300 --sout-x264-preset=ultrafast --sout-x264-tune=zerolatency --sout-x264-vbv-bufsize 0 --sout-transcode-threads 4 --no-audio udp://" + self.ip_addr + ":8554", shell=False)
 
     ##
     # Misc media utils
@@ -1255,11 +1255,11 @@ class GoPro:
                 elif quality == "low":
                     self.streamSettings("250000", "0")
             subprocess.Popen("ffmpeg -f mpegts -i udp://" +
-                             ":8554 -b 800k -r 30 -f mpegts " + addr, shell=True)
+                             ":8554 -b 800k -r 30 -f mpegts " + addr, shell=False)
             self.KeepAlive()
         elif self.whichCam() == constants.Camera.Interface.Auth:
             subprocess.Popen("ffmpeg -i http://" +
-                             "live/amba.m3u8 -f mpegts " + addr, shell=True)
+                             "live/amba.m3u8 -f mpegts " + addr, shell=False)
 
     def streamSettings(self, bitrate, resolution):
         """Sets stream settings"""
