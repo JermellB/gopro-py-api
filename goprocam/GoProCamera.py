@@ -15,6 +15,7 @@ import math
 import base64
 import sys
 import ssl
+from security import safe_command
 
 
 class GoPro:
@@ -805,8 +806,7 @@ class GoPro:
         return self.gpWebcam("SETTINGS?fov=" + fov)
 
     def getWebcamPreview(self):
-        subprocess.Popen(
-            "vlc --network-caching=300 --sout-x264-preset=ultrafast --sout-x264-tune=zerolatency --sout-x264-vbv-bufsize 0 --sout-transcode-threads 4 --no-audio udp://" + self.ip_addr + ":8554", shell=True)
+        safe_command.run(subprocess.Popen, "vlc --network-caching=300 --sout-x264-preset=ultrafast --sout-x264-tune=zerolatency --sout-x264-vbv-bufsize 0 --sout-transcode-threads 4 --no-audio udp://" + self.ip_addr + ":8554", shell=True)
 
     ##
     # Misc media utils
@@ -1254,11 +1254,11 @@ class GoPro:
                     self.streamSettings("1000000", "4")
                 elif quality == "low":
                     self.streamSettings("250000", "0")
-            subprocess.Popen("ffmpeg -f mpegts -i udp://" +
+            safe_command.run(subprocess.Popen, "ffmpeg -f mpegts -i udp://" +
                              ":8554 -b 800k -r 30 -f mpegts " + addr, shell=True)
             self.KeepAlive()
         elif self.whichCam() == constants.Camera.Interface.Auth:
-            subprocess.Popen("ffmpeg -i http://" +
+            safe_command.run(subprocess.Popen, "ffmpeg -i http://" +
                              "live/amba.m3u8 -f mpegts " + addr, shell=True)
 
     def streamSettings(self, bitrate, resolution):
